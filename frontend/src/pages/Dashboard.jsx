@@ -3,7 +3,7 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
     AreaChart, Area, BarChart, Bar, Legend
 } from 'recharts';
-import { Users, DollarSign, UserMinus, CreditCard, TrendingUp, DownloadCloud } from 'lucide-react';
+import { Users, DollarSign, UserMinus, CreditCard, TrendingUp, UploadCloud } from 'lucide-react';
 import api from '../api/axios';
 import Sidebar from '../components/Sidebar';
 
@@ -97,7 +97,7 @@ const Dashboard = () => {
                             onChange={handleFileUpload}
                         />
                         <label htmlFor="file-upload" className="btn btn-outline" style={{ cursor: 'pointer', margin: 0 }}>
-                            <DownloadCloud size={18} />
+                            <UploadCloud size={18} />
                             Upload Live Data
                         </label>
                         <button className="btn btn-primary" onClick={() => window.location.reload()}>
