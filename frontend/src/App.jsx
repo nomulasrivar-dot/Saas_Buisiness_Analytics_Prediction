@@ -3,6 +3,9 @@ import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import Billing from './pages/Billing';
+import Analytics from './pages/Analytics';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -24,6 +27,30 @@ function App() {
             element={
               <PrivateRoute>
                 <Dashboard />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/users" 
+            element={
+              <PrivateRoute>
+                <Users />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/billing" 
+            element={
+              <PrivateRoute>
+                <Billing />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/analytics" 
+            element={
+              <PrivateRoute>
+                <Analytics />
               </PrivateRoute>
             } 
           />

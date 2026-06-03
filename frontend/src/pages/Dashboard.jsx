@@ -27,6 +27,27 @@ const Dashboard = () => {
         fetchAnalytics();
     }, []);
 
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            setLoading(true);
+            const response = await api.post('/analytics/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            setData(response.data);
+        } catch (err) {
+            setError('Failed to upload and parse the file.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (loading) {
         return (
             <>
@@ -68,16 +89,50 @@ const Dashboard = () => {
                         <p style={{ color: 'var(--text-secondary)' }}>Track your SaaS metrics in real-time</p>
                     </div>
                     <div className="header-actions">
-                        <button className="btn btn-outline">
+                        <input 
+                            type="file" 
+                            id="file-upload" 
+                            style={{ display: 'none' }} 
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                            onChange={handleFileUpload}
+                        />
+                        <label htmlFor="file-upload" className="btn btn-outline" style={{ cursor: 'pointer', margin: 0 }}>
                             <DownloadCloud size={18} />
-                            Export Report
-                        </button>
-                        <button className="btn btn-primary">
+                            Upload Live Data
+                        </label>
+                        <button className="btn btn-primary" onClick={() => window.location.reload()}>
                             <TrendingUp size={18} />
-                            Generate Insights
+                            Reset Mock Data
                         </button>
                     </div>
                 </div>
+
+                {summary.prediction && (
+                    <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '2.5rem', borderLeft: '4px solid var(--accent-color)' }}>
+                        <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <TrendingUp size={20} color="var(--accent-color)" />
+                            AI Predictive Insights (Next Month)
+                        </h3>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Expected Revenue</p>
+                                <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>${summary.prediction.revenue.toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Expected Users</p>
+                                <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{summary.prediction.users.toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Expected Churn</p>
+                                <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--danger-color)' }}>{summary.prediction.churnRate}%</p>
+                            </div>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Expected Subscriptions</p>
+                                <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{summary.prediction.subscriptions.toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="stats-grid">
                     <div className="stat-card glass-panel">

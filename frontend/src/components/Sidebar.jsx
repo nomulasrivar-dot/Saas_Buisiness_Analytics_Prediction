@@ -1,6 +1,6 @@
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Users, CreditCard, Activity, Settings, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Users, CreditCard, Activity, LogOut } from 'lucide-react';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
@@ -19,26 +19,22 @@ const Sidebar = () => {
             </div>
 
             <ul className="nav-links">
-                <li className="nav-item active">
+                <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <LayoutDashboard size={20} />
                     <span>Dashboard</span>
-                </li>
-                <li className="nav-item">
+                </NavLink>
+                <NavLink to="/users" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <Users size={20} />
                     <span>Users</span>
-                </li>
-                <li className="nav-item">
+                </NavLink>
+                <NavLink to="/billing" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <CreditCard size={20} />
                     <span>Billing</span>
-                </li>
-                <li className="nav-item">
+                </NavLink>
+                <NavLink to="/analytics" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <Activity size={20} />
                     <span>Analytics</span>
-                </li>
-                <li className="nav-item">
-                    <Settings size={20} />
-                    <span>Settings</span>
-                </li>
+                </NavLink>
             </ul>
 
             <div className="nav-footer">
