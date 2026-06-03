@@ -21,6 +21,8 @@ mongoose.connect(MONGO_URI).then(() => {
     console.error('Error connecting to MongoDB:', err.message);
 });
 
+const path = require('path');
+
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
@@ -28,6 +30,15 @@ const analyticsRoutes = require('./routes/analyticsRoutes');
 app.use('/api/auth', authRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
-app.get('/', (req, res) => {
-    res.send('SaaS Analytics API is running');
-});
+// Serve frontend
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('SaaS Analytics API is running');
+    });
+}
